@@ -19,7 +19,8 @@ public:
 	T& get(size_t, size_t);
 	matrix<T>& operator+=(const matrix<T>&);
 	matrix<T>& operator=(const matrix<T>&);
-    T* operator[](size_t j);
+    class RowClass:public matrix<T>{ matrix<T>* operator[](const size_t j) {  return matrix<T>::RowClass::data[j];} };
+    T operator[](const RowClass& m);
 	~matrix() { if (!data || !data[0]) return;
 	delete[] data[0];
 	data[0] = nullptr;
@@ -94,14 +95,14 @@ inline matrix<T>& matrix<T>::operator+=(const matrix<T>& m) {
 	return *this;
 }
 
-template <class T>
-inline matrix<T> operator+(matrix<T> l, matrix<T>& r) {
-	return l += r;
+template<class T>
+T matrix<T>::operator[](const matrix::RowClass& m) {
+    return m.data[i];
 }
 
 template <class T>
-T* matrix<T>::operator[](size_t j){
-	return data[j];
+inline matrix<T> operator+(matrix<T> l, matrix<T>& r) {
+	return l += r;
 }
 
 template <class T>
